@@ -14,11 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${roboto_mono.className} antialiased`}
-      >
-        {children}
-      </body>
+      <body className={`${roboto_mono.className} antialiased`}>{children}</body>
     </html>
   );
 }
