@@ -40,7 +40,7 @@ export default function Login() {
   }
 
   return (
-    <div className="container mx-auto flex h-screen max-w-3xl flex-col border border-red-500 px-8 sm:px-16">
+    <div className="container mx-auto flex h-screen max-w-3xl flex-col px-8 sm:px-16">
       <div className="my-auto flex flex-col gap-16">
         <div className="text-center text-6xl sm:text-8xl">register</div>
 
