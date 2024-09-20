@@ -8,20 +8,16 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 const formSchema = z.object({
-  username: z.string().min(3).max(30),
   email: z.string().email(),
   password: z.string().min(3),
-  password_confirmation: z.string().min(3)
 })
 
 export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
       email: "",
       password: "",
-      password_confirmation: ""
     }
   })
 
@@ -31,91 +27,51 @@ export default function Login() {
 
   return (
     <div className="container max-w-3xl border border-red-500 mx-auto flex h-screen flex-col px-8 sm:px-16">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>username</FormLabel>
+      <div className="flex flex-col gap-16 my-auto">
+        <div className="text-center text-6xl sm:text-8xl">login</div>
 
-                <FormControl>
-                  <Input placeholder="username" {...field} />
-                </FormControl>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="email" {...field} />
+                  </FormControl>
 
-                <FormDescription>
-                  this is what you'd be called
-                </FormDescription>
+                  <FormDescription>
+                    your unique identifier
+                  </FormDescription>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>email</FormLabel>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="password" {...field} />
+                  </FormControl>
 
-                <FormControl>
-                  <Input placeholder="email" {...field} />
-                </FormControl>
+                  <FormDescription>
+                    how you let us know you're you
+                  </FormDescription>
 
-                <FormDescription>
-                  this is your unique identifier
-                </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>password</FormLabel>
-
-                <FormControl>
-                  <Input placeholder="password" {...field} />
-                </FormControl>
-
-                <FormDescription>
-                  this is how you let us know you're you
-                </FormDescription>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="password_confirmation"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>password confirmation</FormLabel>
-
-                <FormControl>
-                  <Input placeholder="password_confirmation" {...field} />
-                </FormControl>
-
-                <FormDescription>
-                  just to be sure
-                </FormDescription>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button type="submit">submit</Button>
-        </form>
-      </Form>
+            <Button type="submit" className="mt-6">login</Button>
+          </form>
+        </Form>
+      </div>
     </div>
   )
 }
