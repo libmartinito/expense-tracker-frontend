@@ -1,16 +1,23 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(3),
-})
+});
 
 export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -18,20 +25,23 @@ export default function Login() {
     defaultValues: {
       email: "",
       password: "",
-    }
-  })
+    },
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    console.log(values);
   }
 
   return (
-    <div className="container max-w-3xl border border-red-500 mx-auto flex h-screen flex-col px-8 sm:px-16">
-      <div className="flex flex-col gap-16 my-auto">
+    <div className="container mx-auto flex h-screen max-w-3xl flex-col border border-red-500 px-8 sm:px-16">
+      <div className="my-auto flex flex-col gap-16">
         <div className="text-center text-6xl sm:text-8xl">login</div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-6"
+          >
             <FormField
               control={form.control}
               name="email"
@@ -41,9 +51,7 @@ export default function Login() {
                     <Input placeholder="email" {...field} />
                   </FormControl>
 
-                  <FormDescription>
-                    your unique identifier
-                  </FormDescription>
+                  <FormDescription>your unique identifier</FormDescription>
 
                   <FormMessage />
                 </FormItem>
@@ -60,7 +68,7 @@ export default function Login() {
                   </FormControl>
 
                   <FormDescription>
-                    how you let us know you're you
+                    how you let us know you&apos;re you
                   </FormDescription>
 
                   <FormMessage />
@@ -68,10 +76,12 @@ export default function Login() {
               )}
             />
 
-            <Button type="submit" className="mt-6">login</Button>
+            <Button type="submit" className="mt-6">
+              login
+            </Button>
           </form>
         </Form>
       </div>
     </div>
-  )
+  );
 }
