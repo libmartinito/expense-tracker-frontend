@@ -14,15 +14,17 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const formSchema = z.object({
-  username: z.string().min(3).max(30),
-  email: z.string().email(),
-  password: z.string().min(3),
-  passwordConfirmation: z.string().min(3)
-}).refine((data) => data.password === data.passwordConfirmation, {
-  message: "Passwords don't match",
-  path: ["passwordConfirmation"]
-});
+const formSchema = z
+  .object({
+    username: z.string().min(3).max(30),
+    email: z.string().email(),
+    password: z.string().min(3),
+    passwordConfirmation: z.string().min(3),
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "Passwords don't match",
+    path: ["passwordConfirmation"],
+  });
 
 export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -31,7 +33,7 @@ export default function Login() {
       username: "",
       email: "",
       password: "",
-      passwordConfirmation: ""
+      passwordConfirmation: "",
     },
   });
 
@@ -58,7 +60,9 @@ export default function Login() {
                     <Input placeholder="username" {...field} />
                   </FormControl>
 
-                  <FormDescription>what you&apos;d want to be called</FormDescription>
+                  <FormDescription>
+                    what you&apos;d want to be called
+                  </FormDescription>
 
                   <FormMessage />
                 </FormItem>
@@ -108,9 +112,7 @@ export default function Login() {
                     <Input placeholder="password" {...field} />
                   </FormControl>
 
-                  <FormDescription>
-                    just to be sure
-                  </FormDescription>
+                  <FormDescription>just to be sure</FormDescription>
 
                   <FormMessage />
                 </FormItem>
