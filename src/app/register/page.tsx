@@ -14,17 +14,26 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(3),
-});
+const formSchema = z
+  .object({
+    username: z.string().min(3).max(30),
+    email: z.string().email(),
+    password: z.string().min(3),
+    passwordConfirmation: z.string().min(3),
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "Passwords don't match",
+    path: ["passwordConfirmation"],
+  });
 
 export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      username: "",
       email: "",
       password: "",
+      passwordConfirmation: "",
     },
   });
 
@@ -35,13 +44,31 @@ export default function Login() {
   return (
     <div className="container mx-auto flex h-screen max-w-3xl flex-col px-8 sm:px-16">
       <div className="my-auto flex flex-col gap-16">
-        <div className="text-center text-6xl sm:text-8xl">login</div>
+        <div className="text-center text-6xl sm:text-8xl">register</div>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-6"
           >
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="username" {...field} />
+                  </FormControl>
+
+                  <FormDescription>
+                    what you&apos;d want to be called
+                  </FormDescription>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="email"
@@ -76,8 +103,24 @@ export default function Login() {
               )}
             />
 
+            <FormField
+              control={form.control}
+              name="passwordConfirmation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="password" {...field} />
+                  </FormControl>
+
+                  <FormDescription>just to be sure</FormDescription>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <Button type="submit" className="mt-6">
-              login
+              register
             </Button>
           </form>
         </Form>
