@@ -2,13 +2,29 @@ import { Button } from "@/components/ui/button"
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import Link from "next/link"
 
 export default async function Expenses() {
   const response = await fetch("http://127.0.0.1:4010/expenses").then((res) => res.json())
 
   return (
     <div className="container mx-auto px-8 sm:px-16">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between my-8">
+        <nav>
+          <ul className="flex gap-4">
+            <li>
+              <Link href="/expenses">expenses</Link>
+            </li>
+            <li>
+              <Link href="#">user</Link>
+            </li>
+          </ul>
+        </nav>
+
+        <Button variant="secondary">logout</Button>
+      </div>
+
+      <div className="flex justify-between items-center mt-16">
         <div className="text-3xl">expenses</div>
         <div className="flex gap-4">
           <Select>
