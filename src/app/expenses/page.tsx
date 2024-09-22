@@ -1,3 +1,6 @@
+import { Button } from "@/components/ui/button"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+
 export default async function Expenses() {
   const response = await fetch("http://127.0.0.1:4010/expenses").then((res) => res.json())
 
@@ -5,11 +8,29 @@ export default async function Expenses() {
     <div className="container mx-auto px-8 max-w-3xl sm:px-16">
       <div className="text-center text-6xl sm:text-8xl">expenses</div>
 
-      <ul>
-        {response.data.map((item: any) => (
-          <li key={item.key}>item: {item.attributes.item}, amount: {item.attributes.amount}, currency: {item.attributes.currency}</li>
-        ))}
-      </ul>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>item</TableHead>
+            <TableHead>amount</TableHead>
+            <TableHead>purchased at</TableHead>
+            <TableHead>action</TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          {response.data.map((item: any) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.attributes.item}</TableCell>
+              <TableCell>{item.attributes.amount} {item.attributes.currency}</TableCell>
+              <TableCell>{new Date(item.attributes.purchased_at).toDateString()}</TableCell>
+              <TableCell>
+                <Button size="sm" variant="destructive">delete</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   )
 }
