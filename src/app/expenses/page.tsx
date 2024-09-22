@@ -1,15 +1,56 @@
-import { Button } from "@/components/ui/button"
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import Link from "next/link"
+import { Button } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import Link from "next/link";
+
+type expense = {
+  id: number;
+  type: string;
+  attributes: {
+    item: string;
+    amount: number;
+    currency: string;
+    purchased_at: Date;
+    created_at: Date;
+    updated_at: Date;
+  };
+};
+
+type expenses = {
+  data: expense[];
+};
 
 export default async function Expenses() {
-  const response = await fetch("http://127.0.0.1:4010/expenses").then((res) => res.json())
+  const response: expenses = await fetch("http://127.0.0.1:4010/expenses").then(
+    (res) => res.json(),
+  );
 
   return (
     <div className="container mx-auto px-8 sm:px-16">
-      <div className="flex items-center justify-between my-8">
+      <div className="my-8 flex items-center justify-between">
         <nav>
           <ul className="flex gap-4">
             <li>
@@ -24,13 +65,14 @@ export default async function Expenses() {
         <Button variant="secondary">logout</Button>
       </div>
 
-      <div className="flex justify-between items-center mt-16">
+      <div className="mt-16 flex items-center justify-between">
         <div className="text-3xl">expenses</div>
         <div className="flex gap-4">
           <Select>
             <SelectTrigger>
               <SelectValue placeholder="month" />
             </SelectTrigger>
+
             <SelectContent>
               <SelectGroup>
                 <SelectItem value="january">january</SelectItem>
@@ -53,6 +95,7 @@ export default async function Expenses() {
             <SelectTrigger>
               <SelectValue placeholder="year" />
             </SelectTrigger>
+
             <SelectContent>
               <SelectGroup>
                 <SelectItem value="2024">2024</SelectItem>
@@ -77,14 +120,24 @@ export default async function Expenses() {
         </TableHeader>
 
         <TableBody>
-          {response.data.map((item: any) => (
+          {response.data.map((item: expense) => (
             <TableRow key={item.id}>
-              <TableCell className="text-center">{item.attributes.item}</TableCell>
-              <TableCell className="text-center">{item.attributes.amount} {item.attributes.currency}</TableCell>
-              <TableCell className="text-center">{new Date(item.attributes.purchased_at).toDateString()}</TableCell>
+              <TableCell className="text-center">
+                {item.attributes.item}
+              </TableCell>
 
               <TableCell className="text-center">
-                <Button size="sm" variant="destructive">delete</Button>
+                {item.attributes.amount} {item.attributes.currency}
+              </TableCell>
+
+              <TableCell className="text-center">
+                {new Date(item.attributes.purchased_at).toDateString()}
+              </TableCell>
+
+              <TableCell className="text-center">
+                <Button size="sm" variant="destructive">
+                  delete
+                </Button>
               </TableCell>
             </TableRow>
           ))}
@@ -111,5 +164,5 @@ export default async function Expenses() {
         </PaginationContent>
       </Pagination>
     </div>
-  )
+  );
 }
