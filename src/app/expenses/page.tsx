@@ -69,20 +69,21 @@ export default async function Expenses() {
       <Table className="mt-8">
         <TableHeader>
           <TableRow>
-            <TableHead>item</TableHead>
-            <TableHead>amount</TableHead>
-            <TableHead>purchased at</TableHead>
-            <TableHead>action</TableHead>
+            <TableHead className="text-center">item</TableHead>
+            <TableHead className="text-center">amount</TableHead>
+            <TableHead className="text-center">purchased at</TableHead>
+            <TableHead className="text-center">action</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
           {response.data.map((item: any) => (
             <TableRow key={item.id}>
-              <TableCell>{item.attributes.item}</TableCell>
-              <TableCell>{item.attributes.amount} {item.attributes.currency}</TableCell>
-              <TableCell>{new Date(item.attributes.purchased_at).toDateString()}</TableCell>
-              <TableCell>
+              <TableCell className="text-center">{item.attributes.item}</TableCell>
+              <TableCell className="text-center">{item.attributes.amount} {item.attributes.currency}</TableCell>
+              <TableCell className="text-center">{new Date(item.attributes.purchased_at).toDateString()}</TableCell>
+
+              <TableCell className="text-center">
                 <Button size="sm" variant="destructive">delete</Button>
               </TableCell>
             </TableRow>
