@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Link from "next/link";
+import Header from "@/components/header";
 
 type expense = {
   id: number;
@@ -50,20 +50,7 @@ export default async function Expenses() {
 
   return (
     <div className="container mx-auto px-8 sm:px-16">
-      <div className="my-8 flex items-center justify-between">
-        <nav>
-          <ul className="flex gap-4">
-            <li>
-              <Link href="/expenses">expenses</Link>
-            </li>
-            <li>
-              <Link href="#">user</Link>
-            </li>
-          </ul>
-        </nav>
-
-        <Button variant="secondary">logout</Button>
-      </div>
+      <Header />
 
       <div className="mt-16 flex items-center justify-between">
         <div className="text-3xl">expenses</div>

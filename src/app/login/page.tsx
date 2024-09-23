@@ -11,8 +11,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { setToken } from "@/utils/auth";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -28,8 +30,22 @@ export default function Login() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  const router = useRouter();
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const response = await fetch("http://localhost:3000/v1/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: values }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      setToken(data.data.attributes.token);
+      router.push("/expenses");
+    } else {
+      console.error("something went wrong: ", response);
+    }
   }
 
   return (
