@@ -41,7 +41,7 @@ export default function Login() {
 
     if (response.ok) {
       const data = await response.json()
-      setToken(data.token)
+      setToken(data.data.attributes.token)
       router.push("/expenses")
     } else {
       console.error("something went wrong: ", response)
