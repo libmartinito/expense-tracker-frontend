@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "./ui/button"
-import { removeToken } from "@/utils/auth"
+import { getToken, removeToken } from "@/utils/auth"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
@@ -9,7 +9,12 @@ export default function Header() {
   const router = useRouter()
 
   const logout = async () => {
-    const response = await fetch("http://localhost:3000/v1/logout", { method: "POST" })
+    const response = await fetch("http://localhost:3000/v1/logout", {
+      method: "POST",
+      headers: {
+        "Authorization": getToken() as string
+      }
+    })
 
     if (response.ok) {
       removeToken()
