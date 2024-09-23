@@ -16,11 +16,7 @@ export default function Home() {
             <Link href="/register">register</Link>
           </Button>
 
-          <Button
-            variant="secondary"
-            size="lg"
-            asChild
-          >
+          <Button variant="secondary" size="lg" asChild>
             <Link href="/login">login</Link>
           </Button>
         </div>

@@ -38,19 +38,19 @@ export default function Login() {
     },
   });
 
-  const router = useRouter()
+  const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const response = await fetch("http://localhost:3000/v1/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user: values })
-    })
+      body: JSON.stringify({ user: values }),
+    });
 
     if (response.ok) {
-      router.push("/")
+      router.push("/");
     } else {
-      console.error("something went wrong: ", response)
+      console.error("something went wrong: ", response);
     }
   }
 
