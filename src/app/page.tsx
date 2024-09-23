@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -11,15 +12,16 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col gap-8 sm:flex-row">
-          <Button size={window.innerWidth >= 1024 ? "lg" : "default"}>
-            register
+          <Button size="lg" asChild>
+            <Link href="/register">register</Link>
           </Button>
 
           <Button
             variant="secondary"
-            size={window.innerWidth >= 1024 ? "lg" : "default"}
+            size="lg"
+            asChild
           >
-            login
+            <Link href="/login">login</Link>
           </Button>
         </div>
       </div>
