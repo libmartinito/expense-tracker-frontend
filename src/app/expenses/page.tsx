@@ -47,6 +47,7 @@ type expense = {
 
 export type meta = {
   total?: number
+  total_amount_in_cents?: number
   years?: number[]
 }
 
@@ -155,7 +156,9 @@ export default function Expenses() {
         </div>
       </div>
 
-      <Table className="mt-8">
+      <div className="mt-2">total amount: {((meta.total_amount_in_cents || 0) / 100).toFixed(2)}</div>
+
+      <Table className="mt-6">
         <TableHeader>
           <TableRow>
             <TableHead className="text-center">item</TableHead>
@@ -173,7 +176,7 @@ export default function Expenses() {
               </TableCell>
 
               <TableCell className="text-center">
-                {item.attributes.amount_in_cents / 100} {item.attributes.currency}
+                {(item.attributes.amount_in_cents / 100).toFixed(2)} {item.attributes.currency}
               </TableCell>
 
               <TableCell className="text-center">
