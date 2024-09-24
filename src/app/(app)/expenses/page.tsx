@@ -29,7 +29,6 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Header from "@/components/header";
 import Link from "next/link";
 
 type expense = {
@@ -121,9 +120,7 @@ export default function Expenses() {
   }, [page, perPage, month, year]);
 
   return (
-    <div className="container mx-auto px-8 sm:px-16">
-      <Header />
-
+    <>
       <div className="mt-16 flex items-center justify-between">
         <div className="text-3xl">expenses</div>
 
@@ -254,6 +251,6 @@ export default function Expenses() {
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-    </div>
+    </>
   );
 }

@@ -26,14 +26,13 @@ export default function User() {
   }, [])
 
   return (
-    <div className="container mx-auto px-8 sm:px-16">
-      <Header />
+    <>
       <div className="text-center text-6xl mt-8 sm:text-8xl">user</div>
 
       <div className="mt-8">
         <div>username: {user?.attributes.username}</div>
         <div>email: {user?.attributes.email}</div>
       </div>
-    </div>
+    </>
   )
 }
