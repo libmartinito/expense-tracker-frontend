@@ -4,6 +4,7 @@ import { Button } from "./ui/button"
 import { getToken, removeToken } from "@/utils/auth"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { ThemeToggle } from "./theme-toggle"
 
 export default function Header() {
   const router = useRouter()
@@ -37,7 +38,10 @@ export default function Header() {
         </ul>
       </nav>
 
-      <Button variant="secondary" onClick={logout}>logout</Button>
+      <div className="flex gap-4">
+        <ThemeToggle />
+        <Button variant="secondary" onClick={logout}>logout</Button>
+      </div>
     </div>
   )
 }
