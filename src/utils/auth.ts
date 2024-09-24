@@ -23,9 +23,5 @@ export const removeId = () => {
 };
 
 export const isAuthenticated = () => {
-  console.log(
-    ">>> from utils get auth",
-    !!localStorage.getItem("expense-tracker-auth-token"),
-  );
   return !!localStorage.getItem("expense-tracker-auth-token");
 };
