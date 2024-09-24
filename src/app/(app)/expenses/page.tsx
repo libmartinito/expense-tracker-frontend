@@ -78,7 +78,7 @@ const Expenses = () => {
   const perPage = searchParams.get("per_page");
 
   const deleteExpense = async (id: number) => {
-    const backendUrl = "http://localhost:3000/v1/expenses";
+    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`;
 
     await fetch(`${backendUrl}/${id}`, {
       method: "DELETE",
@@ -92,7 +92,7 @@ const Expenses = () => {
 
   useEffect(() => {
     const getExpenses = async () => {
-      const backendUrl = "http://localhost:3000/v1/expenses";
+      const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`;
       const queryParams = new URLSearchParams();
 
       if (page) {

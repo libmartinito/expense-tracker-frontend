@@ -58,7 +58,7 @@ const Expense = () => {
   const [open, setOpen] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const response = await fetch("http://localhost:3000/v1/expenses", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`, {
       method: "POST",
       headers: {
         Authorization: getToken() as string,

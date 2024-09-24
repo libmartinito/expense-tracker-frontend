@@ -10,7 +10,7 @@ export default function Header() {
   const router = useRouter()
 
   const logout = async () => {
-    const response = await fetch("http://localhost:3000/v1/logout", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/logout`, {
       method: "POST",
       headers: {
         "Authorization": getToken() as string

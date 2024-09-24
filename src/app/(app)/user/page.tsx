@@ -18,7 +18,7 @@ const User = () => {
 
   useEffect(() => {
     const getUser = async () => {
-      const response = await fetch(`http://localhost:3000/v1/users/${getUserId()}`, { headers: { "Authorization": getToken() as string } }).then((res) => res.json())
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/users/${getUserId()}`, { headers: { "Authorization": getToken() as string } }).then((res) => res.json())
       setUser(response.data)
     }
 
