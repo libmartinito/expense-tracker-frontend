@@ -52,15 +52,15 @@ export default function Expense() {
     },
   });
 
-  const router = useRouter()
-  const [open, setOpen] = useState(false)
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const response = await fetch("http://localhost:3000/v1/expenses", {
       method: "POST",
       headers: {
-        "Authorization": getToken() as string,
-        "Content-Type": "application/json"
+        Authorization: getToken() as string,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ expense: values }),
     });
@@ -130,7 +130,11 @@ export default function Expense() {
                     <FormControl>
                       <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
-                          <Button variant="outline" role="combobox" className="font-normal">
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className="font-normal"
+                          >
                             {field.value ? (
                               cc
                                 .codes()
@@ -159,10 +163,17 @@ export default function Expense() {
                                     key={currency}
                                     onSelect={(value) => {
                                       form.setValue("currency", value);
-                                      setOpen(false)
+                                      setOpen(false);
                                     }}
                                   >
-                                    <Check className={cn("mr-2 h-4 w-4", form.getValues("currency") === currency ? "opacity-100" : "opacity-0")} />
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        form.getValues("currency") === currency
+                                          ? "opacity-100"
+                                          : "opacity-0",
+                                      )}
+                                    />
                                     {currency}
                                   </CommandItem>
                                 ))}

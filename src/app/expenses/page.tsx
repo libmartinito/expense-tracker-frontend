@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { getToken } from "@/utils/auth";
@@ -46,77 +46,79 @@ type expense = {
 };
 
 export type meta = {
-  total?: number
-  total_amount_in_cents?: number
-  years?: number[]
-}
+  total?: number;
+  total_amount_in_cents?: number;
+  years?: number[];
+};
 
 type links = {
-  first?: string
-  last?: string
-  prev?: string
-  next?: string
-}
+  first?: string;
+  last?: string;
+  prev?: string;
+  next?: string;
+};
 
 type expenses = {
-  data: expense[]
-  meta: meta
-  links: links
+  data: expense[];
+  meta: meta;
+  links: links;
 };
 
 export default function Expenses() {
-  const [expenses, setExpenses] = useState<expense[]>([])
-  const [meta, setMeta] = useState<meta>({})
-  const [month, setMonth] = useState<string>((new Date().getMonth() + 1).toString().padStart(2, "0"))
-  const [links, setLinks] = useState<links>({})
-  const [year, setYear] = useState<string>(new Date().getFullYear().toString())
-  const searchParams = useSearchParams()
+  const [expenses, setExpenses] = useState<expense[]>([]);
+  const [meta, setMeta] = useState<meta>({});
+  const [month, setMonth] = useState<string>(
+    (new Date().getMonth() + 1).toString().padStart(2, "0"),
+  );
+  const [links, setLinks] = useState<links>({});
+  const [year, setYear] = useState<string>(new Date().getFullYear().toString());
+  const searchParams = useSearchParams();
 
-  const page = searchParams.get("page")
-  const perPage = searchParams.get("per_page")
+  const page = searchParams.get("page");
+  const perPage = searchParams.get("per_page");
 
   const deleteExpense = async (id: number) => {
-    const backendUrl = "http://localhost:3000/v1/expenses"
+    const backendUrl = "http://localhost:3000/v1/expenses";
 
     await fetch(`${backendUrl}/${id}`, {
       method: "DELETE",
       headers: {
-        "Authorization": getToken() as string
-      }
-    })
+        Authorization: getToken() as string,
+      },
+    });
 
-    window.location.reload()
-  }
-
-  const getExpenses = async () => {
-    const backendUrl = "http://localhost:3000/v1/expenses"
-    const queryParams = new URLSearchParams()
-
-    if (page) {
-      queryParams.append("page", page)
-    }
-
-    if (perPage) {
-      queryParams.append("per_page", perPage)
-    }
-
-    queryParams.append("month", month)
-    queryParams.append("year", year)
-
-    const response: expenses = await fetch(`${backendUrl}?${queryParams}`, {
-      headers: {
-        "Authorization": getToken() as string
-      }
-    }).then((res) => res.json())
-
-    setExpenses(response.data)
-    setMeta(response.meta)
-    setLinks(response.links)
-  }
+    window.location.reload();
+  };
 
   useEffect(() => {
-    getExpenses()
-  }, [month, year])
+    const getExpenses = async () => {
+      const backendUrl = "http://localhost:3000/v1/expenses";
+      const queryParams = new URLSearchParams();
+
+      if (page) {
+        queryParams.append("page", page);
+      }
+
+      if (perPage) {
+        queryParams.append("per_page", perPage);
+      }
+
+      queryParams.append("month", month);
+      queryParams.append("year", year);
+
+      const response: expenses = await fetch(`${backendUrl}?${queryParams}`, {
+        headers: {
+          Authorization: getToken() as string,
+        },
+      }).then((res) => res.json());
+
+      setExpenses(response.data);
+      setMeta(response.meta);
+      setLinks(response.links);
+    };
+
+    getExpenses();
+  }, [page, perPage, month, year]);
 
   return (
     <div className="container mx-auto px-8 sm:px-16">
@@ -157,7 +159,9 @@ export default function Expenses() {
             <SelectContent>
               <SelectGroup>
                 {meta.years?.map((year) => (
-                  <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
@@ -169,7 +173,9 @@ export default function Expenses() {
         </div>
       </div>
 
-      <div className="mt-2">total amount: {((meta.total_amount_in_cents || 0) / 100).toFixed(2)}</div>
+      <div className="mt-2">
+        total amount: {((meta.total_amount_in_cents || 0) / 100).toFixed(2)}
+      </div>
 
       <Table className="mt-6">
         <TableHeader>
@@ -189,7 +195,8 @@ export default function Expenses() {
               </TableCell>
 
               <TableCell className="text-center">
-                {(item.attributes.amount_in_cents / 100).toFixed(2)} {item.attributes.currency}
+                {(item.attributes.amount_in_cents / 100).toFixed(2)}{" "}
+                {item.attributes.currency}
               </TableCell>
 
               <TableCell className="text-center">
@@ -197,7 +204,11 @@ export default function Expenses() {
               </TableCell>
 
               <TableCell className="text-center">
-                <Button size="sm" variant="destructive" onClick={() => deleteExpense(item.id)}>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={() => deleteExpense(item.id)}
+                >
                   delete
                 </Button>
               </TableCell>
@@ -207,23 +218,39 @@ export default function Expenses() {
       </Table>
 
       <Pagination className="items-center gap-4 pt-8">
-        <div className="text-sm">Page {page ? page : 1} of {meta.total}</div>
+        <div className="text-sm">
+          Page {page ? page : 1} of {meta.total}
+        </div>
 
         <PaginationContent>
           <PaginationItem>
-            <PaginationFirst href={links.first ? links.first : "#"} className={links.first ? "" : "cursor-default pointer-events-none"} />
+            <PaginationFirst
+              href={links.first ? links.first : "#"}
+              className={
+                links.first ? "" : "pointer-events-none cursor-default"
+              }
+            />
           </PaginationItem>
 
           <PaginationItem>
-            <PaginationPrevious href={links.prev ? links.prev : "#"} className={links.prev ? "" : "cursor-default pointer-events-none"} />
+            <PaginationPrevious
+              href={links.prev ? links.prev : "#"}
+              className={links.prev ? "" : "pointer-events-none cursor-default"}
+            />
           </PaginationItem>
 
           <PaginationItem>
-            <PaginationNext href={links.next ? links.next : "#"} className={links.next ? "" : "cursor-default pointer-events-none"} />
+            <PaginationNext
+              href={links.next ? links.next : "#"}
+              className={links.next ? "" : "pointer-events-none cursor-default"}
+            />
           </PaginationItem>
 
           <PaginationItem>
-            <PaginationLast href={links.last ? links.last : "#"} className={links.last ? "" : "cursor-default pointer-events-none"} />
+            <PaginationLast
+              href={links.last ? links.last : "#"}
+              className={links.last ? "" : "pointer-events-none cursor-default"}
+            />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
