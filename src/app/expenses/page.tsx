@@ -131,7 +131,7 @@ export default function Expenses() {
               <SelectValue placeholder="month" />
             </SelectTrigger>
 
-            <SelectContent>
+            <SelectContent className="max-h-64">
               <SelectGroup>
                 <SelectItem value="01">january</SelectItem>
                 <SelectItem value="02">february</SelectItem>
