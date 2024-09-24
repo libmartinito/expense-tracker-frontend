@@ -104,7 +104,7 @@ const Register = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <Input type="password" placeholder="password" {...field} />
                   </FormControl>
 
                   <FormDescription>
@@ -122,7 +122,7 @@ const Register = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <Input type="password" placeholder="password confirmation" {...field} />
                   </FormControl>
 
                   <FormDescription>just to be sure</FormDescription>

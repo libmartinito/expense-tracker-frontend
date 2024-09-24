@@ -81,7 +81,7 @@ const Login = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <Input type="password" placeholder="password" {...field} />
                   </FormControl>
 
                   <FormDescription>
