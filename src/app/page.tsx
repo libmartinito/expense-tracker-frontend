@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
 
-export default function Home() {
+const Home = () => {
   return (
     <div className="container mx-auto flex h-screen flex-col px-8 sm:px-16">
       <div className="my-auto flex flex-col gap-4">
@@ -29,3 +29,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Home

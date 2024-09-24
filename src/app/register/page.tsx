@@ -27,7 +27,7 @@ const formSchema = z
     path: ["passwordConfirmation"],
   });
 
-export default function Login() {
+const Register = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -141,3 +141,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default Register
