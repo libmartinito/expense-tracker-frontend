@@ -75,7 +75,7 @@ const Expense = () => {
   }
 
   return (
-    <div className="container mx-auto flex h-screen max-w-3xl flex-col px-8 sm:px-16">
+    <div className="mx-auto flex h-screen max-w-3xl flex-col px-8 sm:px-16">
       <div className="my-auto pb-32">
         <div className="text-center text-6xl sm:text-8xl">expense</div>
 
