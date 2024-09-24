@@ -12,6 +12,14 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -20,9 +28,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
-import ExpenseListHeader from "@/components/expense-list-header";
-import Header from "@/components/header";
 import { useSearchParams } from "next/navigation";
+import Header from "@/components/header";
+import Link from "next/link";
 
 type expense = {
   id: number;
@@ -37,8 +45,9 @@ type expense = {
   };
 };
 
-type meta = {
+export type meta = {
   total?: number
+  years?: number[]
 }
 
 type links = {
@@ -57,7 +66,9 @@ type expenses = {
 export default function Expenses() {
   const [expenses, setExpenses] = useState<expense[]>([])
   const [meta, setMeta] = useState<meta>({})
+  const [month, setMonth] = useState<string>((new Date().getMonth() + 1).toString().padStart(2, "0"))
   const [links, setLinks] = useState<links>({})
+  const [year, setYear] = useState<string>(new Date().getFullYear().toString())
   const searchParams = useSearchParams()
 
   const page = searchParams.get("page")
@@ -75,6 +86,9 @@ export default function Expenses() {
       queryParams.append("per_page", perPage)
     }
 
+    queryParams.append("month", month)
+    queryParams.append("year", year)
+
     const response: expenses = await fetch(`${backendUrl}?${queryParams}`, {
       headers: {
         "Authorization": getToken() as string
@@ -88,12 +102,58 @@ export default function Expenses() {
 
   useEffect(() => {
     getExpenses()
-  }, [])
+  }, [month, year])
 
   return (
     <div className="container mx-auto px-8 sm:px-16">
       <Header />
-      <ExpenseListHeader />
+
+      <div className="mt-16 flex items-center justify-between">
+        <div className="text-3xl">expenses</div>
+
+        <div className="flex gap-4">
+          <Select defaultValue={month} onValueChange={setMonth}>
+            <SelectTrigger>
+              <SelectValue placeholder="month" />
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="01">january</SelectItem>
+                <SelectItem value="02">february</SelectItem>
+                <SelectItem value="03">march</SelectItem>
+                <SelectItem value="04">april</SelectItem>
+                <SelectItem value="05">may</SelectItem>
+                <SelectItem value="06">june</SelectItem>
+                <SelectItem value="07">july</SelectItem>
+                <SelectItem value="08">august</SelectItem>
+                <SelectItem value="09">september</SelectItem>
+                <SelectItem value="10">october</SelectItem>
+                <SelectItem value="11">november</SelectItem>
+                <SelectItem value="12">december</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Select defaultValue={year} onValueChange={setYear}>
+            <SelectTrigger>
+              <SelectValue placeholder="year" />
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectGroup>
+                {meta.years?.map((year) => (
+                  <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Button>
+            <Link href="/expenses/new">create</Link>
+          </Button>
+        </div>
+      </div>
 
       <Table className="mt-8">
         <TableHeader>
