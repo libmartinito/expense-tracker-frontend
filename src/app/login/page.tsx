@@ -14,14 +14,14 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { setToken } from "@/utils/auth";
+import { setToken, setUserId } from "@/utils/auth";
 
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(3),
 });
 
-export default function Login() {
+const Login = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,14 +33,18 @@ export default function Login() {
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const response = await fetch("http://localhost:3000/v1/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user: values }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user: values }),
+      },
+    );
 
     if (response.ok) {
       const data = await response.json();
+      setUserId(data.data.id);
       setToken(data.data.attributes.token);
       router.push("/expenses");
     } else {
@@ -50,13 +54,13 @@ export default function Login() {
 
   return (
     <div className="container mx-auto flex h-screen max-w-3xl flex-col px-8 sm:px-16">
-      <div className="my-auto flex flex-col gap-16">
-        <div className="text-center text-6xl sm:text-8xl">login</div>
+      <div className="my-auto pb-32">
+        <div className="mt-8 text-center text-6xl sm:text-8xl">login</div>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6"
+            className="mt-16 flex flex-col gap-6"
           >
             <FormField
               control={form.control}
@@ -80,7 +84,7 @@ export default function Login() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <Input type="password" placeholder="password" {...field} />
                   </FormControl>
 
                   <FormDescription>
@@ -100,4 +104,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default Login;

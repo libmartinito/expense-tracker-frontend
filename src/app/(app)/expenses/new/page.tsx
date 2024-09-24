@@ -33,6 +33,8 @@ import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import cc from "currency-codes";
+import Link from "next/link";
+import withAuth from "@/components/with-auth";
 
 const formSchema = z.object({
   item: z.string().min(1),
@@ -41,7 +43,7 @@ const formSchema = z.object({
   purchased_at: z.date(),
 });
 
-export default function Expense() {
+const Expense = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,14 +58,17 @@ export default function Expense() {
   const [open, setOpen] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const response = await fetch("http://localhost:3000/v1/expenses", {
-      method: "POST",
-      headers: {
-        Authorization: getToken() as string,
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: getToken() as string,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ expense: values }),
       },
-      body: JSON.stringify({ expense: values }),
-    });
+    );
 
     if (response.ok) {
       router.push("/expenses");
@@ -73,14 +78,14 @@ export default function Expense() {
   }
 
   return (
-    <div className="container mx-auto flex h-screen max-w-3xl flex-col px-8 sm:px-16">
-      <div className="my-auto flex flex-col gap-16">
+    <div className="mx-auto flex h-screen max-w-3xl flex-col px-8 sm:px-16">
+      <div className="my-auto pb-32">
         <div className="text-center text-6xl sm:text-8xl">expense</div>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6"
+            className="mt-16 flex flex-col gap-6"
           >
             <FormField
               control={form.control}
@@ -235,7 +240,15 @@ export default function Expense() {
             </Button>
           </form>
         </Form>
+
+        <Button variant="secondary" className="mt-6 w-full">
+          <Link href="/expenses" className="w-full">
+            cancel
+          </Link>
+        </Button>
       </div>
     </div>
   );
-}
+};
+
+export default withAuth(Expense);

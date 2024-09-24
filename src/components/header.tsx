@@ -1,7 +1,8 @@
 "use client"
 
 import { Button } from "./ui/button"
-import { getToken, removeToken } from "@/utils/auth"
+import { getToken, removeId, removeToken } from "@/utils/auth"
+import { ThemeToggle } from "./theme-toggle"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
@@ -9,7 +10,7 @@ export default function Header() {
   const router = useRouter()
 
   const logout = async () => {
-    const response = await fetch("http://localhost:3000/v1/logout", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/logout`, {
       method: "POST",
       headers: {
         "Authorization": getToken() as string
@@ -18,6 +19,7 @@ export default function Header() {
 
     if (response.ok) {
       removeToken()
+      removeId()
       router.push("/")
     } else {
       console.error("something went wrong: ", response)
@@ -32,12 +34,15 @@ export default function Header() {
             <Link href="/expenses">expenses</Link>
           </li>
           <li>
-            <Link href="#">user</Link>
+            <Link href="/user">user</Link>
           </li>
         </ul>
       </nav>
 
-      <Button variant="secondary" onClick={logout}>logout</Button>
+      <div className="flex gap-4">
+        <ThemeToggle />
+        <Button variant="secondary" onClick={logout}>logout</Button>
+      </div>
     </div>
   )
 }

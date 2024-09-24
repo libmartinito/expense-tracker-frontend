@@ -27,7 +27,7 @@ const formSchema = z
     path: ["passwordConfirmation"],
   });
 
-export default function Login() {
+const Register = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,11 +41,14 @@ export default function Login() {
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const response = await fetch("http://localhost:3000/v1/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user: values }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/register`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user: values }),
+      },
+    );
 
     if (response.ok) {
       router.push("/");
@@ -56,13 +59,13 @@ export default function Login() {
 
   return (
     <div className="container mx-auto flex h-screen max-w-3xl flex-col px-8 sm:px-16">
-      <div className="my-auto flex flex-col gap-16">
-        <div className="text-center text-6xl sm:text-8xl">register</div>
+      <div className="my-auto pb-32">
+        <div className="mt-8 text-center text-6xl sm:text-8xl">register</div>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6"
+            className="mt-16 flex flex-col gap-6"
           >
             <FormField
               control={form.control}
@@ -104,7 +107,7 @@ export default function Login() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <Input type="password" placeholder="password" {...field} />
                   </FormControl>
 
                   <FormDescription>
@@ -122,7 +125,11 @@ export default function Login() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="password confirmation"
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormDescription>just to be sure</FormDescription>
@@ -140,4 +147,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default Register;

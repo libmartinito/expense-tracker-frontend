@@ -29,8 +29,8 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Header from "@/components/header";
 import Link from "next/link";
+import withAuth from "@/components/with-auth";
 
 type expense = {
   id: number;
@@ -64,7 +64,7 @@ type expenses = {
   links: links;
 };
 
-export default function Expenses() {
+const Expenses = () => {
   const [expenses, setExpenses] = useState<expense[]>([]);
   const [meta, setMeta] = useState<meta>({});
   const [month, setMonth] = useState<string>(
@@ -78,7 +78,7 @@ export default function Expenses() {
   const perPage = searchParams.get("per_page");
 
   const deleteExpense = async (id: number) => {
-    const backendUrl = "http://localhost:3000/v1/expenses";
+    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`;
 
     await fetch(`${backendUrl}/${id}`, {
       method: "DELETE",
@@ -92,7 +92,7 @@ export default function Expenses() {
 
   useEffect(() => {
     const getExpenses = async () => {
-      const backendUrl = "http://localhost:3000/v1/expenses";
+      const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`;
       const queryParams = new URLSearchParams();
 
       if (page) {
@@ -121,9 +121,7 @@ export default function Expenses() {
   }, [page, perPage, month, year]);
 
   return (
-    <div className="container mx-auto px-8 sm:px-16">
-      <Header />
-
+    <>
       <div className="mt-16 flex items-center justify-between">
         <div className="text-3xl">expenses</div>
 
@@ -254,6 +252,8 @@ export default function Expenses() {
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-    </div>
+    </>
   );
-}
+};
+
+export default withAuth(Expenses);
