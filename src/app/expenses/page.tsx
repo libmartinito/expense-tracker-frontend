@@ -75,6 +75,19 @@ export default function Expenses() {
   const page = searchParams.get("page")
   const perPage = searchParams.get("per_page")
 
+  const deleteExpense = async (id: number) => {
+    const backendUrl = "http://localhost:3000/v1/expenses"
+
+    await fetch(`${backendUrl}/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": getToken() as string
+      }
+    })
+
+    window.location.reload()
+  }
+
   const getExpenses = async () => {
     const backendUrl = "http://localhost:3000/v1/expenses"
     const queryParams = new URLSearchParams()
@@ -184,7 +197,7 @@ export default function Expenses() {
               </TableCell>
 
               <TableCell className="text-center">
-                <Button size="sm" variant="destructive">
+                <Button size="sm" variant="destructive" onClick={() => deleteExpense(item.id)}>
                   delete
                 </Button>
               </TableCell>
