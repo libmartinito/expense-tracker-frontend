@@ -34,6 +34,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import cc from "currency-codes";
 import Link from "next/link";
+import withAuth from "@/components/with-auth";
 
 const formSchema = z.object({
   item: z.string().min(1),
@@ -42,7 +43,7 @@ const formSchema = z.object({
   purchased_at: z.date(),
 });
 
-export default function Expense() {
+const Expense = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -244,3 +245,5 @@ export default function Expense() {
     </div>
   );
 }
+
+export default withAuth(Expense)

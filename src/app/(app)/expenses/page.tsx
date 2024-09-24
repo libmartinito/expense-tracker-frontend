@@ -30,6 +30,7 @@ import {
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import withAuth from "@/components/with-auth";
 
 type expense = {
   id: number;
@@ -63,7 +64,7 @@ type expenses = {
   links: links;
 };
 
-export default function Expenses() {
+const Expenses = () => {
   const [expenses, setExpenses] = useState<expense[]>([]);
   const [meta, setMeta] = useState<meta>({});
   const [month, setMonth] = useState<string>(
@@ -254,3 +255,5 @@ export default function Expenses() {
     </>
   );
 }
+
+export default withAuth(Expenses)

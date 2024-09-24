@@ -1,6 +1,6 @@
 "use client"
 
-import Header from "@/components/header";
+import withAuth from "@/components/with-auth";
 import { getToken, getUserId } from "@/utils/auth";
 import { useEffect, useState } from "react";
 
@@ -13,7 +13,7 @@ type user = {
   }
 }
 
-export default function User() {
+const User = () => {
   const [user, setUser] = useState<user | null>(null)
 
   useEffect(() => {
@@ -36,3 +36,5 @@ export default function User() {
     </>
   )
 }
+
+export default withAuth(User)

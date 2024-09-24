@@ -21,3 +21,8 @@ export const getUserId = () => {
 export const removeId = () => {
   localStorage.removeItem("expense-tracker-user-id");
 }
+
+export const isAuthenticated = () => {
+  console.log(">>> from utils get auth", !!localStorage.getItem("expense-tracker-auth-token"))
+  return !!localStorage.getItem("expense-tracker-auth-token")
+}
