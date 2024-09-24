@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, ChevronsUpDown } from "lucide-react";
+import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
   Command,
   CommandGroup,
@@ -19,6 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { format } from "date-fns";
+import { getToken } from "@/utils/auth";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -26,6 +28,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import cc from "currency-codes";
@@ -34,7 +38,7 @@ const formSchema = z.object({
   item: z.string().min(1),
   amount: z.number().multipleOf(0.01),
   currency: z.string().min(1, "Please choose a currency"),
-  purchasedAt: z.date(),
+  purchased_at: z.date(),
 });
 
 export default function Expense() {
@@ -42,14 +46,30 @@ export default function Expense() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       item: "",
-      amount: undefined,
+      amount: 0,
       currency: "",
-      purchasedAt: undefined,
+      purchased_at: undefined,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const response = await fetch("http://localhost:3000/v1/expenses", {
+      method: "POST",
+      headers: {
+        Authorization: getToken() as string,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ expense: values }),
+    });
+
+    if (response.ok) {
+      router.push("/expenses");
+    } else {
+      console.error("something went wrong: ", response);
+    }
   }
 
   return (
@@ -108,15 +128,19 @@ export default function Expense() {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Popover>
+                      <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
-                          <Button variant="outline" role="combobox">
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className="font-normal"
+                          >
                             {field.value ? (
                               cc
                                 .codes()
                                 .find((currency) => currency === field.value)
                             ) : (
-                              <span className="font-normal text-muted-foreground">
+                              <span className="text-muted-foreground">
                                 currency
                               </span>
                             )}
@@ -139,8 +163,17 @@ export default function Expense() {
                                     key={currency}
                                     onSelect={(value) => {
                                       form.setValue("currency", value);
+                                      setOpen(false);
                                     }}
                                   >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        form.getValues("currency") === currency
+                                          ? "opacity-100"
+                                          : "opacity-0",
+                                      )}
+                                    />
                                     {currency}
                                   </CommandItem>
                                 ))}
@@ -159,17 +192,17 @@ export default function Expense() {
 
             <FormField
               control={form.control}
-              name="purchasedAt"
+              name="purchased_at"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="outline">
+                        <Button variant="outline" className="font-normal">
                           {field.value ? (
                             format(field.value, "PPP")
                           ) : (
-                            <span className="font-normal text-muted-foreground">
+                            <span className="text-muted-foreground">
                               when did you make the purchase?
                             </span>
                           )}
