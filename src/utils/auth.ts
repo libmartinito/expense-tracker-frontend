@@ -9,3 +9,11 @@ export const getToken = () => {
 export const removeToken = () => {
   localStorage.removeItem("expense-tracker-auth-token");
 };
+
+export const setUserId = (id: string) => {
+  localStorage.setItem("expense-tracker-user-id", id)
+}
+
+export const getUserId = () => {
+  return localStorage.getItem("expense-tracker-user-id")
+}

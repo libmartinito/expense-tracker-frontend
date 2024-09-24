@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { setToken } from "@/utils/auth";
+import { setToken, setUserId } from "@/utils/auth";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -41,6 +41,7 @@ export default function Login() {
 
     if (response.ok) {
       const data = await response.json();
+      setUserId(data.id)
       setToken(data.data.attributes.token);
       router.push("/expenses");
     } else {

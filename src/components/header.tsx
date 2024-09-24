@@ -33,7 +33,7 @@ export default function Header() {
             <Link href="/expenses">expenses</Link>
           </li>
           <li>
-            <Link href="#">user</Link>
+            <Link href="/user">user</Link>
           </li>
         </ul>
       </nav>
