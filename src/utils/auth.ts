@@ -17,3 +17,7 @@ export const setUserId = (id: string) => {
 export const getUserId = () => {
   return localStorage.getItem("expense-tracker-user-id")
 }
+
+export const removeId = () => {
+  localStorage.removeItem("expense-tracker-user-id");
+}

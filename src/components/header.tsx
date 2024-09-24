@@ -1,10 +1,10 @@
 "use client"
 
 import { Button } from "./ui/button"
-import { getToken, removeToken } from "@/utils/auth"
+import { getToken, removeId, removeToken } from "@/utils/auth"
+import { ThemeToggle } from "./theme-toggle"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { ThemeToggle } from "./theme-toggle"
 
 export default function Header() {
   const router = useRouter()
@@ -19,6 +19,7 @@ export default function Header() {
 
     if (response.ok) {
       removeToken()
+      removeId()
       router.push("/")
     } else {
       console.error("something went wrong: ", response)
