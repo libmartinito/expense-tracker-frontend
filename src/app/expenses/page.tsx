@@ -1,4 +1,7 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
+import { getToken } from "@/utils/auth";
 import {
   Pagination,
   PaginationContent,
@@ -9,14 +12,6 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Table,
   TableBody,
   TableCell,
@@ -24,6 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useEffect, useState } from "react";
+import ExpenseListHeader from "@/components/expense-list-header";
 import Header from "@/components/header";
 
 type expense = {
@@ -31,7 +28,7 @@ type expense = {
   type: string;
   attributes: {
     item: string;
-    amount: number;
+    amount_in_cents: number;
     currency: string;
     purchased_at: Date;
     created_at: Date;
@@ -43,58 +40,27 @@ type expenses = {
   data: expense[];
 };
 
-export default async function Expenses() {
-  const response: expenses = await fetch("http://127.0.0.1:4010/expenses").then(
-    (res) => res.json(),
-  );
+export default function Expenses() {
+  const [expenses, setExpenses] = useState<expense[]>([])
+
+  useEffect(() => {
+    const getExpenses = async () => {
+      const response: expenses = await fetch("http://localhost:3000/v1/expenses", {
+        headers: {
+          "Authorization": getToken() as string
+        }
+      }).then((res) => res.json())
+
+      setExpenses(response.data)
+    }
+
+    getExpenses()
+  }, [])
 
   return (
     <div className="container mx-auto px-8 sm:px-16">
       <Header />
-
-      <div className="mt-16 flex items-center justify-between">
-        <div className="text-3xl">expenses</div>
-        <div className="flex gap-4">
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder="month" />
-            </SelectTrigger>
-
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="january">january</SelectItem>
-                <SelectItem value="february">february</SelectItem>
-                <SelectItem value="march">march</SelectItem>
-                <SelectItem value="april">april</SelectItem>
-                <SelectItem value="may">may</SelectItem>
-                <SelectItem value="june">june</SelectItem>
-                <SelectItem value="july">july</SelectItem>
-                <SelectItem value="august">august</SelectItem>
-                <SelectItem value="september">september</SelectItem>
-                <SelectItem value="october">october</SelectItem>
-                <SelectItem value="november">november</SelectItem>
-                <SelectItem value="december">december</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder="year" />
-            </SelectTrigger>
-
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="2024">2024</SelectItem>
-                <SelectItem value="2023">2023</SelectItem>
-                <SelectItem value="2022">2022</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          <Button>create</Button>
-        </div>
-      </div>
+      <ExpenseListHeader />
 
       <Table className="mt-8">
         <TableHeader>
@@ -107,14 +73,14 @@ export default async function Expenses() {
         </TableHeader>
 
         <TableBody>
-          {response.data.map((item: expense) => (
+          {expenses.map((item: expense) => (
             <TableRow key={item.id}>
               <TableCell className="text-center">
                 {item.attributes.item}
               </TableCell>
 
               <TableCell className="text-center">
-                {item.attributes.amount} {item.attributes.currency}
+                {item.attributes.amount_in_cents / 100} {item.attributes.currency}
               </TableCell>
 
               <TableCell className="text-center">
