@@ -41,7 +41,7 @@ export default function Login() {
 
     if (response.ok) {
       const data = await response.json();
-      setUserId(data.id)
+      setUserId(data.data.id)
       setToken(data.data.attributes.token);
       router.push("/expenses");
     } else {
