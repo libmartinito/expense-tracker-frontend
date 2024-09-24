@@ -33,6 +33,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import cc from "currency-codes";
+import Link from "next/link";
 
 const formSchema = z.object({
   item: z.string().min(1),
@@ -232,6 +233,10 @@ export default function Expense() {
 
             <Button type="submit" className="mt-6">
               create
+            </Button>
+
+            <Button variant="secondary">
+              <Link href="/expenses">cancel</Link>
             </Button>
           </form>
         </Form>
