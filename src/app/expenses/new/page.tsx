@@ -75,13 +75,13 @@ export default function Expense() {
 
   return (
     <div className="container mx-auto flex h-screen max-w-3xl flex-col px-8 sm:px-16">
-      <div className="my-auto flex flex-col gap-16">
+      <div className="my-auto pb-32">
         <div className="text-center text-6xl sm:text-8xl">expense</div>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6"
+            className="flex flex-col gap-6 mt-16"
           >
             <FormField
               control={form.control}
@@ -234,12 +234,12 @@ export default function Expense() {
             <Button type="submit" className="mt-6">
               create
             </Button>
-
-            <Button variant="secondary">
-              <Link href="/expenses">cancel</Link>
-            </Button>
           </form>
         </Form>
+
+        <Button variant="secondary" className="mt-6 w-full">
+          <Link href="/expenses" className="w-full">cancel</Link>
+        </Button>
       </div>
     </div>
   );
