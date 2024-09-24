@@ -254,6 +254,6 @@ const Expenses = () => {
       </Pagination>
     </>
   );
-}
+};
 
-export default withAuth(Expenses)
+export default withAuth(Expenses);

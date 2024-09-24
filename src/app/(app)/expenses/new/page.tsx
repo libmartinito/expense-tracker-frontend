@@ -58,14 +58,17 @@ const Expense = () => {
   const [open, setOpen] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`, {
-      method: "POST",
-      headers: {
-        Authorization: getToken() as string,
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: getToken() as string,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ expense: values }),
       },
-      body: JSON.stringify({ expense: values }),
-    });
+    );
 
     if (response.ok) {
       router.push("/expenses");
@@ -82,7 +85,7 @@ const Expense = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6 mt-16"
+            className="mt-16 flex flex-col gap-6"
           >
             <FormField
               control={form.control}
@@ -239,11 +242,13 @@ const Expense = () => {
         </Form>
 
         <Button variant="secondary" className="mt-6 w-full">
-          <Link href="/expenses" className="w-full">cancel</Link>
+          <Link href="/expenses" className="w-full">
+            cancel
+          </Link>
         </Button>
       </div>
     </div>
   );
-}
+};
 
-export default withAuth(Expense)
+export default withAuth(Expense);

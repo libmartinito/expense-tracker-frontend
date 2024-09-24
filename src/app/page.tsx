@@ -16,7 +16,7 @@ const Home = () => {
           yet another expense tracker
         </div>
 
-        <div className="flex flex-col gap-8 mt-6 sm:flex-row">
+        <div className="mt-6 flex flex-col gap-8 sm:flex-row">
           <Button size="lg" asChild>
             <Link href="/register">register</Link>
           </Button>
@@ -28,6 +28,6 @@ const Home = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Home
+export default Home;

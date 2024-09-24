@@ -41,11 +41,14 @@ const Register = () => {
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user: values }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/register`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user: values }),
+      },
+    );
 
     if (response.ok) {
       router.push("/");
@@ -57,12 +60,12 @@ const Register = () => {
   return (
     <div className="container mx-auto flex h-screen max-w-3xl flex-col px-8 sm:px-16">
       <div className="my-auto pb-32">
-        <div className="text-center text-6xl mt-8 sm:text-8xl">register</div>
+        <div className="mt-8 text-center text-6xl sm:text-8xl">register</div>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6 mt-16"
+            className="mt-16 flex flex-col gap-6"
           >
             <FormField
               control={form.control}
@@ -122,7 +125,11 @@ const Register = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input type="password" placeholder="password confirmation" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="password confirmation"
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormDescription>just to be sure</FormDescription>
@@ -140,6 +147,6 @@ const Register = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Register
+export default Register;
