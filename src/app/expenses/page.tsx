@@ -5,9 +5,9 @@ import { getToken } from "@/utils/auth";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
+  PaginationFirst,
   PaginationItem,
-  PaginationLink,
+  PaginationLast,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
@@ -22,6 +22,7 @@ import {
 import { useEffect, useState } from "react";
 import ExpenseListHeader from "@/components/expense-list-header";
 import Header from "@/components/header";
+import { useSearchParams } from "next/navigation";
 
 type expense = {
   id: number;
@@ -36,24 +37,56 @@ type expense = {
   };
 };
 
+type meta = {
+  total?: number
+}
+
+type links = {
+  first?: string
+  last?: string
+  prev?: string
+  next?: string
+}
+
 type expenses = {
-  data: expense[];
+  data: expense[]
+  meta: meta
+  links: links
 };
 
 export default function Expenses() {
   const [expenses, setExpenses] = useState<expense[]>([])
+  const [meta, setMeta] = useState<meta>({})
+  const [links, setLinks] = useState<links>({})
+  const searchParams = useSearchParams()
 
-  useEffect(() => {
-    const getExpenses = async () => {
-      const response: expenses = await fetch("http://localhost:3000/v1/expenses", {
-        headers: {
-          "Authorization": getToken() as string
-        }
-      }).then((res) => res.json())
+  const page = searchParams.get("page")
+  const perPage = searchParams.get("per_page")
 
-      setExpenses(response.data)
+  const getExpenses = async () => {
+    const backendUrl = "http://localhost:3000/v1/expenses"
+    const queryParams = new URLSearchParams()
+
+    if (page) {
+      queryParams.append("page", page)
     }
 
+    if (perPage) {
+      queryParams.append("per_page", perPage)
+    }
+
+    const response: expenses = await fetch(`${backendUrl}?${queryParams}`, {
+      headers: {
+        "Authorization": getToken() as string
+      }
+    }).then((res) => res.json())
+
+    setExpenses(response.data)
+    setMeta(response.meta)
+    setLinks(response.links)
+  }
+
+  useEffect(() => {
     getExpenses()
   }, [])
 
@@ -97,22 +130,24 @@ export default function Expenses() {
         </TableBody>
       </Table>
 
-      <Pagination className="pt-8">
+      <Pagination className="items-center gap-4 pt-8">
+        <div className="text-sm">Page {page ? page : 1} of {meta.total}</div>
+
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious href="#" />
+            <PaginationFirst href={links.first ? links.first : "#"} className={links.first ? "" : "cursor-default pointer-events-none"} />
           </PaginationItem>
 
           <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
+            <PaginationPrevious href={links.prev ? links.prev : "#"} className={links.prev ? "" : "cursor-default pointer-events-none"} />
           </PaginationItem>
 
           <PaginationItem>
-            <PaginationEllipsis />
+            <PaginationNext href={links.next ? links.next : "#"} className={links.next ? "" : "cursor-default pointer-events-none"} />
           </PaginationItem>
 
           <PaginationItem>
-            <PaginationNext href="#" />
+            <PaginationLast href={links.last ? links.last : "#"} className={links.last ? "" : "cursor-default pointer-events-none"} />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
