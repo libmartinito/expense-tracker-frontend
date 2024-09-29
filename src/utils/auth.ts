@@ -1,43 +1,47 @@
-const isBrowser = typeof window !== "undefined";
-
 export const setToken = (token: string) => {
-  if (isBrowser) {
+  if (typeof window !== "undefined") {
     localStorage.setItem("expense-tracker-auth-token", token);
   }
-};
+}
 
 export const getToken = () => {
-  if (isBrowser) {
+  if (typeof window !== "undefined") {
     return localStorage.getItem("expense-tracker-auth-token");
   }
-};
+
+  return null
+}
 
 export const removeToken = () => {
-  if (isBrowser) {
+  if (typeof window !== "undefined") {
     localStorage.removeItem("expense-tracker-auth-token");
   }
-};
+}
 
 export const setUserId = (id: string) => {
-  if (isBrowser) {
+  if (typeof window !== "undefined") {
     localStorage.setItem("expense-tracker-user-id", id);
   }
-};
+}
 
 export const getUserId = () => {
-  if (isBrowser) {
+  if (typeof window !== "undefined") {
     return localStorage.getItem("expense-tracker-user-id");
   }
-};
 
-export const removeId = () => {
-  if (isBrowser) {
+  return null
+}
+
+export const removeUserId = () => {
+  if (typeof window !== "undefined") {
     localStorage.removeItem("expense-tracker-user-id");
   }
-};
+}
 
 export const isAuthenticated = () => {
-  if (isBrowser) {
+  if (typeof window !== "undefined") {
     return !!localStorage.getItem("expense-tracker-auth-token");
   }
+
+  return false
 };

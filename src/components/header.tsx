@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "./ui/button"
-import { getToken, removeId, removeToken } from "@/utils/auth"
+import { getToken, removeUserId, removeToken } from "@/utils/auth"
 import { ThemeToggle } from "./theme-toggle"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -10,16 +10,22 @@ export default function Header() {
   const router = useRouter()
 
   const logout = async () => {
+    const token = getToken()
+
+    if (!token) {
+      return
+    }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/logout`, {
       method: "POST",
       headers: {
-        "Authorization": getToken() as string
+        "Authorization": token
       }
     })
 
     if (response.ok) {
       removeToken()
-      removeId()
+      removeUserId()
       router.push("/")
     } else {
       console.error("something went wrong: ", response)

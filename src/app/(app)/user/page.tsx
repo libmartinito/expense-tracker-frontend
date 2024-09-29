@@ -18,9 +18,16 @@ const User = () => {
 
   useEffect(() => {
     const getUser = async () => {
+      const userId = getUserId()
+      const token = getToken()
+
+      if (!userId || !token) {
+        return
+      }
+
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/users/${getUserId()}`,
-        { headers: { Authorization: getToken() as string } },
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/users/${userId}`,
+        { headers: { Authorization: token } },
       ).then((res) => res.json());
       setUser(response.data);
     };

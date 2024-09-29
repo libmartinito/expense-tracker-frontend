@@ -79,12 +79,18 @@ const Expenses = () => {
   const perPage = searchParams.get("per_page");
 
   const deleteExpense = async (id: number) => {
+    const token = getToken()
+
+    if (!token) {
+      return
+    }
+
     const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`;
 
     await fetch(`${backendUrl}/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: getToken() as string,
+        Authorization: token,
       },
     });
 
@@ -95,6 +101,12 @@ const Expenses = () => {
 
   useEffect(() => {
     const getExpenses = async () => {
+      const token = getToken()
+
+      if (!token) {
+        return
+      }
+
       const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`;
       const queryParams = new URLSearchParams();
 
@@ -111,7 +123,7 @@ const Expenses = () => {
 
       const response: expenses = await fetch(`${backendUrl}?${queryParams}`, {
         headers: {
-          Authorization: getToken() as string,
+          Authorization: token,
         },
       }).then((res) => res.json());
 

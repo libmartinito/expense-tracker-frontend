@@ -58,12 +58,18 @@ const Expense = () => {
   const [open, setOpen] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    const token = getToken()
+
+    if (!token) {
+      return
+    }
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`,
       {
         method: "POST",
         headers: {
-          Authorization: getToken() as string,
+          Authorization: token,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ expense: values }),
