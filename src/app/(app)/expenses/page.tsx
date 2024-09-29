@@ -94,6 +94,7 @@ const Expenses = () => {
         setYear={setYear}
         meta={meta}
       />
+
       <ExpensesTable expenses={expenses} />
 
       {!!meta.total_pages && meta.total_pages > 0 && (

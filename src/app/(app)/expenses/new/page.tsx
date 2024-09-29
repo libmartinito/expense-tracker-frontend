@@ -70,6 +70,7 @@ const Expense = () => {
 
             <div className="flex gap-6">
               <ExpenseAmountFormField form={form} />
+
               <ExpenseCurrencyFormField
                 form={form}
                 open={open}
