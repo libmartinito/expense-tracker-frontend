@@ -4,7 +4,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
-export function ThemeToggle() {
+type ThemeToggleProps = {
+  className?: string
+}
+
+export function ThemeToggle({ className }: ThemeToggleProps) {
   const { setTheme, theme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -13,7 +17,7 @@ export function ThemeToggle() {
   }, [])
 
   return (
-    <>
+    <div className={className}>
       {mounted && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -31,6 +35,6 @@ export function ThemeToggle() {
           </DropdownMenuContent>
         </DropdownMenu>
       )}
-    </>
+    </div>
   )
 }

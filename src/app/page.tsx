@@ -7,23 +7,25 @@ import Link from "next/link";
 const Home = () => {
   return (
     <div className="container mx-auto flex h-screen flex-col px-8 sm:px-16">
-      <div className="my-auto flex flex-col gap-4">
-        <div className="flex justify-end">
-          <ThemeToggle />
-        </div>
+      <div className="flex justify-end">
+        <ThemeToggle className="my-8" />
+      </div>
 
-        <div className="text-6xl tracking-widest sm:text-8xl">
-          yet another expense tracker
-        </div>
+      <div className="flex h-full">
+        <div className="my-auto grow">
+          <div className="text-6xl tracking-widest sm:text-8xl">
+            yet another expense tracker
+          </div>
 
-        <div className="mt-6 flex flex-col gap-8 sm:flex-row">
-          <Button size="lg" asChild>
-            <Link href="/register">register</Link>
-          </Button>
+          <div className="mt-16 flex flex-col gap-8 sm:flex-row">
+            <Button size="lg" asChild>
+              <Link href="/register">register</Link>
+            </Button>
 
-          <Button variant="secondary" size="lg" asChild>
-            <Link href="/login">login</Link>
-          </Button>
+            <Button variant="secondary" size="lg" asChild>
+              <Link href="/login">login</Link>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
