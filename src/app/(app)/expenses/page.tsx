@@ -87,11 +87,22 @@ const Expenses = () => {
 
   return (
     <>
-      <ExpensesHeader month={month} setMonth={setMonth} year={year} setYear={setYear} meta={meta} />
+      <ExpensesHeader
+        month={month}
+        setMonth={setMonth}
+        year={year}
+        setYear={setYear}
+        meta={meta}
+      />
       <ExpensesTable expenses={expenses} />
 
       {!!meta.total_pages && meta.total_pages > 0 && (
-        <ExpensesPagination page={meta.current_page} meta={meta} links={links} getExpenses={getExpenses} />
+        <ExpensesPagination
+          page={meta.current_page}
+          meta={meta}
+          links={links}
+          getExpenses={getExpenses}
+        />
       )}
     </>
   );

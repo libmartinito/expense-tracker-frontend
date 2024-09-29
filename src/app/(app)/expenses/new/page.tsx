@@ -1,9 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { getToken } from "@/utils/auth";
 import { expenseFormSchema } from "@/schemas/expense-form-schema";
 import { useForm } from "react-hook-form";
@@ -72,7 +70,11 @@ const Expense = () => {
 
             <div className="flex gap-6">
               <ExpenseAmountFormField form={form} />
-              <ExpenseCurrencyFormField form={form} open={open} setOpen={setOpen} />
+              <ExpenseCurrencyFormField
+                form={form}
+                open={open}
+                setOpen={setOpen}
+              />
             </div>
 
             <ExpensePurchasedAtFormField form={form} />
