@@ -18,11 +18,11 @@ const User = () => {
 
   useEffect(() => {
     const getUser = async () => {
-      const userId = getUserId()
-      const token = getToken()
+      const userId = getUserId();
+      const token = getToken();
 
       if (!userId || !token) {
-        return
+        return;
       }
 
       const response = await fetch(

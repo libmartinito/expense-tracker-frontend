@@ -5,11 +5,7 @@ import { getToken } from "@/utils/auth";
 import {
   Pagination,
   PaginationContent,
-  PaginationFirst,
   PaginationItem,
-  PaginationLast,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
   Select,
@@ -27,10 +23,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import withAuth from "@/components/with-auth";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 
 type expense = {
   id: number;
@@ -79,10 +81,10 @@ const Expenses = () => {
   const perPage = searchParams.get("per_page");
 
   const deleteExpense = async (id: number) => {
-    const token = getToken()
+    const token = getToken();
 
     if (!token) {
-      return
+      return;
     }
 
     const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`;
@@ -99,25 +101,17 @@ const Expenses = () => {
     }
   };
 
-  useEffect(() => {
-    const getExpenses = async () => {
-      const token = getToken()
+  const getExpenses = useCallback(
+    async (link: string | undefined = undefined) => {
+      const token = getToken();
 
       if (!token) {
-        return
+        return;
       }
 
-      const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`;
+      const backendUrl =
+        link || `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`;
       const queryParams = new URLSearchParams();
-
-      if (page) {
-        queryParams.append("page", page);
-      }
-
-      if (perPage) {
-        queryParams.append("per_page", perPage);
-      }
-
       queryParams.append("month", month);
       queryParams.append("year", year);
 
@@ -130,11 +124,14 @@ const Expenses = () => {
       setExpenses(response.data);
       setMeta(response.meta);
       setLinks(response.links);
-    };
+    },
+    [month, year],
+  );
 
+  useEffect(() => {
     setIsBrowser(typeof window !== "undefined");
     getExpenses();
-  }, [page, perPage, month, year]);
+  }, [page, perPage, month, year, getExpenses]);
 
   return (
     <>
@@ -231,45 +228,71 @@ const Expenses = () => {
         </TableBody>
       </Table>
 
-      {!!meta.total && meta.total > 0 &&
-        <Pagination className="items-center gap-4 pt-8 pb-32">
+      {!!meta.total && meta.total > 0 && (
+        <Pagination className="items-center gap-4 pb-32 pt-8">
           <div className="text-sm">
             Page {page ? page : 1} of {meta.total}
           </div>
 
           <PaginationContent>
             <PaginationItem>
-              <PaginationFirst
-                href={links.first ? links.first : "#"}
+              <Button
+                variant="ghost"
                 className={
-                  !!links.first && meta.total !== 1 ? "" : "pointer-events-none cursor-default"
+                  !!links.first && meta.total !== 1
+                    ? ""
+                    : "pointer-events-none cursor-default"
                 }
-              />
+                onClick={() => getExpenses(links.first)}
+              >
+                <ChevronsLeft className="h-4 w-4" />
+              </Button>
             </PaginationItem>
 
             <PaginationItem>
-              <PaginationPrevious
-                href={links.prev ? links.prev : "#"}
-                className={links.prev ? "" : "pointer-events-none cursor-default"}
-              />
+              <Button
+                variant="ghost"
+                className={
+                  !!links.prev && meta.total !== 1
+                    ? ""
+                    : "pointer-events-none cursor-default"
+                }
+                onClick={() => getExpenses(links.prev)}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
             </PaginationItem>
 
             <PaginationItem>
-              <PaginationNext
-                href={links.next ? links.next : "#"}
-                className={links.next ? "" : "pointer-events-none cursor-default"}
-              />
+              <Button
+                variant="ghost"
+                className={
+                  !!links.next && meta.total !== 1
+                    ? ""
+                    : "pointer-events-none cursor-default"
+                }
+                onClick={() => getExpenses(links.next)}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </PaginationItem>
 
             <PaginationItem>
-              <PaginationLast
-                href={links.last ? links.last : "#"}
-                className={!!links.last && meta.total !== 1 ? "" : "pointer-events-none cursor-default"}
-              />
+              <Button
+                variant="ghost"
+                className={
+                  !!links.last && meta.total !== 1
+                    ? ""
+                    : "pointer-events-none cursor-default"
+                }
+                onClick={() => getExpenses(links.last)}
+              >
+                <ChevronsRight className="h-4 w-4" />
+              </Button>
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-      }
+      )}
     </>
   );
 };

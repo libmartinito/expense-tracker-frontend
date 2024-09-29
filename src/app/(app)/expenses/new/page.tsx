@@ -58,10 +58,10 @@ const Expense = () => {
   const [open, setOpen] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const token = getToken()
+    const token = getToken();
 
     if (!token) {
-      return
+      return;
     }
 
     const response = await fetch(
