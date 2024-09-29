@@ -219,43 +219,45 @@ const Expenses = () => {
         </TableBody>
       </Table>
 
-      <Pagination className="items-center gap-4 pt-8">
-        <div className="text-sm">
-          Page {page ? page : 1} of {meta.total}
-        </div>
+      {!!meta.total && meta.total > 0 &&
+        <Pagination className="items-center gap-4 pt-8 pb-32">
+          <div className="text-sm">
+            Page {page ? page : 1} of {meta.total}
+          </div>
 
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationFirst
-              href={links.first ? links.first : "#"}
-              className={
-                links.first ? "" : "pointer-events-none cursor-default"
-              }
-            />
-          </PaginationItem>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationFirst
+                href={links.first ? links.first : "#"}
+                className={
+                  !!links.first && meta.total !== 1 ? "" : "pointer-events-none cursor-default"
+                }
+              />
+            </PaginationItem>
 
-          <PaginationItem>
-            <PaginationPrevious
-              href={links.prev ? links.prev : "#"}
-              className={links.prev ? "" : "pointer-events-none cursor-default"}
-            />
-          </PaginationItem>
+            <PaginationItem>
+              <PaginationPrevious
+                href={links.prev ? links.prev : "#"}
+                className={links.prev ? "" : "pointer-events-none cursor-default"}
+              />
+            </PaginationItem>
 
-          <PaginationItem>
-            <PaginationNext
-              href={links.next ? links.next : "#"}
-              className={links.next ? "" : "pointer-events-none cursor-default"}
-            />
-          </PaginationItem>
+            <PaginationItem>
+              <PaginationNext
+                href={links.next ? links.next : "#"}
+                className={links.next ? "" : "pointer-events-none cursor-default"}
+              />
+            </PaginationItem>
 
-          <PaginationItem>
-            <PaginationLast
-              href={links.last ? links.last : "#"}
-              className={links.last ? "" : "pointer-events-none cursor-default"}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+            <PaginationItem>
+              <PaginationLast
+                href={links.last ? links.last : "#"}
+                className={!!links.last && meta.total !== 1 ? "" : "pointer-events-none cursor-default"}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      }
     </>
   );
 };
