@@ -66,14 +66,15 @@ type expenses = {
 
 const Expenses = () => {
   const [expenses, setExpenses] = useState<expense[]>([]);
+  const [isBrowser, setIsBrowser] = useState(false);
   const [meta, setMeta] = useState<meta>({});
   const [month, setMonth] = useState<string>(
     (new Date().getMonth() + 1).toString().padStart(2, "0"),
   );
   const [links, setLinks] = useState<links>({});
   const [year, setYear] = useState<string>(new Date().getFullYear().toString());
-  const searchParams = useSearchParams();
 
+  const searchParams = useSearchParams();
   const page = searchParams.get("page");
   const perPage = searchParams.get("per_page");
 
@@ -87,7 +88,9 @@ const Expenses = () => {
       },
     });
 
-    window.location.reload();
+    if (isBrowser) {
+      window.location.reload();
+    }
   };
 
   useEffect(() => {
@@ -117,6 +120,7 @@ const Expenses = () => {
       setLinks(response.links);
     };
 
+    setIsBrowser(typeof window !== "undefined");
     getExpenses();
   }, [page, perPage, month, year]);
 
