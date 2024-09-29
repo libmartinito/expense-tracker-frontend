@@ -1,40 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { getToken } from "@/utils/auth";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@/components/ui/pagination";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+import ExpensesPagination from "@/components/expenses/expenses-pagination";
+import ExpensesTable from "@/components/expenses/expenses-table";
+import ExpensesHeader from "@/components/expenses/expenses-header";
 import withAuth from "@/components/with-auth";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from "lucide-react";
 
-type expense = {
+export type expense = {
   id: number;
   type: string;
   attributes: {
@@ -48,12 +22,13 @@ type expense = {
 };
 
 export type meta = {
-  total?: number;
+  current_page?: number;
+  total_pages?: number;
   total_amount_in_cents?: number;
   years?: number[];
 };
 
-type links = {
+export type links = {
   first?: string;
   last?: string;
   prev?: string;
@@ -68,7 +43,6 @@ type expenses = {
 
 const Expenses = () => {
   const [expenses, setExpenses] = useState<expense[]>([]);
-  const [isBrowser, setIsBrowser] = useState(false);
   const [meta, setMeta] = useState<meta>({});
   const [month, setMonth] = useState<string>(
     (new Date().getMonth() + 1).toString().padStart(2, "0"),
@@ -79,27 +53,6 @@ const Expenses = () => {
   const searchParams = useSearchParams();
   const page = searchParams.get("page");
   const perPage = searchParams.get("per_page");
-
-  const deleteExpense = async (id: number) => {
-    const token = getToken();
-
-    if (!token) {
-      return;
-    }
-
-    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`;
-
-    await fetch(`${backendUrl}/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    if (isBrowser) {
-      window.location.reload();
-    }
-  };
 
   const getExpenses = useCallback(
     async (link: string | undefined = undefined) => {
@@ -129,169 +82,16 @@ const Expenses = () => {
   );
 
   useEffect(() => {
-    setIsBrowser(typeof window !== "undefined");
     getExpenses();
   }, [page, perPage, month, year, getExpenses]);
 
   return (
     <>
-      <div className="mt-16 flex items-center justify-between">
-        <div className="text-3xl">expenses</div>
+      <ExpensesHeader month={month} setMonth={setMonth} year={year} setYear={setYear} meta={meta} />
+      <ExpensesTable expenses={expenses} />
 
-        <div className="flex gap-4">
-          <Select defaultValue={month} onValueChange={setMonth}>
-            <SelectTrigger>
-              <SelectValue placeholder="month" />
-            </SelectTrigger>
-
-            <SelectContent className="max-h-64">
-              <SelectGroup>
-                <SelectItem value="01">january</SelectItem>
-                <SelectItem value="02">february</SelectItem>
-                <SelectItem value="03">march</SelectItem>
-                <SelectItem value="04">april</SelectItem>
-                <SelectItem value="05">may</SelectItem>
-                <SelectItem value="06">june</SelectItem>
-                <SelectItem value="07">july</SelectItem>
-                <SelectItem value="08">august</SelectItem>
-                <SelectItem value="09">september</SelectItem>
-                <SelectItem value="10">october</SelectItem>
-                <SelectItem value="11">november</SelectItem>
-                <SelectItem value="12">december</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          <Select defaultValue={year} onValueChange={setYear}>
-            <SelectTrigger>
-              <SelectValue placeholder="year" />
-            </SelectTrigger>
-
-            <SelectContent>
-              <SelectGroup>
-                {meta.years?.map((year) => (
-                  <SelectItem key={year} value={year.toString()}>
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          <Button>
-            <Link href="/expenses/new">create</Link>
-          </Button>
-        </div>
-      </div>
-
-      <div className="mt-2">
-        total amount: {((meta.total_amount_in_cents || 0) / 100).toFixed(2)}
-      </div>
-
-      <Table className="mt-6">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="text-center">item</TableHead>
-            <TableHead className="text-center">amount</TableHead>
-            <TableHead className="text-center">purchased at</TableHead>
-            <TableHead className="text-center">action</TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {expenses.map((item: expense) => (
-            <TableRow key={item.id}>
-              <TableCell className="text-center">
-                {item.attributes.item}
-              </TableCell>
-
-              <TableCell className="text-center">
-                {(item.attributes.amount_in_cents / 100).toFixed(2)}{" "}
-                {item.attributes.currency}
-              </TableCell>
-
-              <TableCell className="text-center">
-                {new Date(item.attributes.purchased_at).toDateString()}
-              </TableCell>
-
-              <TableCell className="text-center">
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => deleteExpense(item.id)}
-                >
-                  delete
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-
-      {!!meta.total && meta.total > 0 && (
-        <Pagination className="items-center gap-4 pb-32 pt-8">
-          <div className="text-sm">
-            Page {page ? page : 1} of {meta.total}
-          </div>
-
-          <PaginationContent>
-            <PaginationItem>
-              <Button
-                variant="ghost"
-                className={
-                  !!links.first && meta.total !== 1
-                    ? ""
-                    : "pointer-events-none cursor-default"
-                }
-                onClick={() => getExpenses(links.first)}
-              >
-                <ChevronsLeft className="h-4 w-4" />
-              </Button>
-            </PaginationItem>
-
-            <PaginationItem>
-              <Button
-                variant="ghost"
-                className={
-                  !!links.prev && meta.total !== 1
-                    ? ""
-                    : "pointer-events-none cursor-default"
-                }
-                onClick={() => getExpenses(links.prev)}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-            </PaginationItem>
-
-            <PaginationItem>
-              <Button
-                variant="ghost"
-                className={
-                  !!links.next && meta.total !== 1
-                    ? ""
-                    : "pointer-events-none cursor-default"
-                }
-                onClick={() => getExpenses(links.next)}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </PaginationItem>
-
-            <PaginationItem>
-              <Button
-                variant="ghost"
-                className={
-                  !!links.last && meta.total !== 1
-                    ? ""
-                    : "pointer-events-none cursor-default"
-                }
-                onClick={() => getExpenses(links.last)}
-              >
-                <ChevronsRight className="h-4 w-4" />
-              </Button>
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+      {!!meta.total_pages && meta.total_pages > 0 && (
+        <ExpensesPagination page={meta.current_page} meta={meta} links={links} getExpenses={getExpenses} />
       )}
     </>
   );
