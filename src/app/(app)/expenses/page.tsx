@@ -57,13 +57,13 @@ const Expenses = () => {
         return;
       }
 
-      const backendUrl =
-        link || `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`;
-      const queryParams = new URLSearchParams();
-      queryParams.append("month", month);
-      queryParams.append("year", year);
+      const backendUrl = new URL(
+        link || `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`,
+      );
+      backendUrl.searchParams.set("month", month);
+      backendUrl.searchParams.set("year", year);
 
-      const response: expenses = await fetch(`${backendUrl}?${queryParams}`, {
+      const response: expenses = await fetch(`${backendUrl}`, {
         headers: {
           Authorization: token,
         },
