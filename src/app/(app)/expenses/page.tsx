@@ -2,7 +2,6 @@
 
 import { getToken } from "@/utils/auth";
 import { useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import ExpensesPagination from "@/components/expenses/expenses-pagination";
 import ExpensesTable from "@/components/expenses/expenses-table";
 import ExpensesHeader from "@/components/expenses/expenses-header";
@@ -91,7 +90,11 @@ const Expenses = () => {
         meta={meta}
       />
 
-      <ExpensesTable expenses={expenses} meta={meta} getExpenses={getExpenses} />
+      <ExpensesTable
+        expenses={expenses}
+        meta={meta}
+        getExpenses={getExpenses}
+      />
 
       {!!meta.total_pages && meta.total_pages > 0 && (
         <ExpensesPagination
