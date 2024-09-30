@@ -34,7 +34,7 @@ const ExpensesPagination = ({ page, meta, links, getExpenses }: ExpensesPaginati
           <Button
             variant="ghost"
             className={
-              !!links.first && meta.total_pages !== 1
+              !!links.first && meta.total_pages !== 1 && meta.current_page !== 1
                 ? ""
                 : "pointer-events-none cursor-default"
             }
@@ -76,7 +76,7 @@ const ExpensesPagination = ({ page, meta, links, getExpenses }: ExpensesPaginati
           <Button
             variant="ghost"
             className={
-              !!links.last && meta.total_pages !== 1
+              !!links.last && meta.total_pages !== 1 && meta.current_page !== meta.total_pages
                 ? ""
                 : "pointer-events-none cursor-default"
             }
