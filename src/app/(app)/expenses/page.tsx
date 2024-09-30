@@ -50,10 +50,6 @@ const Expenses = () => {
   const [links, setLinks] = useState<links>({});
   const [year, setYear] = useState<string>(new Date().getFullYear().toString());
 
-  const searchParams = useSearchParams();
-  const page = searchParams.get("page");
-  const perPage = searchParams.get("per_page");
-
   const getExpenses = useCallback(
     async (link: string | undefined = undefined) => {
       const token = getToken();
@@ -83,7 +79,7 @@ const Expenses = () => {
 
   useEffect(() => {
     getExpenses();
-  }, [page, perPage, month, year, getExpenses]);
+  }, [month, year, getExpenses]);
 
   return (
     <>
@@ -95,7 +91,7 @@ const Expenses = () => {
         meta={meta}
       />
 
-      <ExpensesTable expenses={expenses} />
+      <ExpensesTable expenses={expenses} meta={meta} getExpenses={getExpenses} />
 
       {!!meta.total_pages && meta.total_pages > 0 && (
         <ExpensesPagination

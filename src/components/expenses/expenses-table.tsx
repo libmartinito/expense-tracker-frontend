@@ -10,13 +10,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { expense } from "@/app/(app)/expenses/page";
+import type { expense, meta } from "@/app/(app)/expenses/page";
 
 type ExpensesTableProps = {
   expenses: expense[]
+  meta: meta
+  getExpenses: (link?: string) => void
 }
 
-const ExpensesTable = ({ expenses }: ExpensesTableProps) => {
+const ExpensesTable = ({ expenses, meta, getExpenses }: ExpensesTableProps) => {
   const deleteExpense = async (id: number) => {
     const token = getToken();
 
@@ -33,9 +35,7 @@ const ExpensesTable = ({ expenses }: ExpensesTableProps) => {
       },
     });
 
-    if (typeof window !== "undefined") {
-      window.location.reload();
-    }
+    getExpenses(`${backendUrl}?page=${meta.current_page}`)
   };
 
   return (
