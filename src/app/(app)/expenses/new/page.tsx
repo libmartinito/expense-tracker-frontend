@@ -37,6 +37,10 @@ const Expense = () => {
       return;
     }
 
+    const timeZoneOffsetInMinutes = new Date().getTimezoneOffset()
+    const timeZoneOffsetInHours = -timeZoneOffsetInMinutes / 60
+    values.purchased_at = new Date(values.purchased_at.setHours(timeZoneOffsetInHours))
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/expenses`,
       {
